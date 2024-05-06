@@ -69,19 +69,16 @@ class Customer {
 
   /** Get best customers */
   static async getBest() {
-    const top10Ids = await db.query(
+    const results = await db.query(
       `SELECT customer_id
       FROM reservations 
       GROUP BY customer_id
       ORDER BY COUNT(*) DESC
       LIMIT 10`
     );
-    let customers = top10Ids.rows.map(c => await Customer.get(c.customer_id))
-    console.log(customers)
-
-
-    
-  }
+    console.log(results.rows)
+    return results.rows.map( row => new Customer(row))
+}
   /** get all reservations for this customer. */
 
   async getReservations() {
